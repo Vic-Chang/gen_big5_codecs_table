@@ -17,7 +17,7 @@ def gen_big5_hex() -> tuple[hex, hex]:
     for high in range(high_bytes_from, high_bytes_to + 1):
         for low in range(low_bytes_from, low_bytes_to + 1):
             if low not in range(low_bytes_exclude_from, low_bytes_exclude_to + 1):
-                yield hex((high << 8) + low), hex(low)
+                yield hex((high << 8) + low).upper(), hex(low).upper()
 
 
 def gen_big5_table(codecs_name):
@@ -27,7 +27,7 @@ def gen_big5_table(codecs_name):
     :return: Print 出 Table
     """
     # Print Header
-    print('　　｜　+0　+1　+2　+3　+4　+5　+6　+7　+8　+9　+A　+B　+c　+D　+E　+F')
+    print('　　｜　+0　+1　+2　+3　+4　+5　+6　+7　+8　+9　+A　+B　+C　+D　+E　+F')
 
     current_hex_head = ''
     msg = ''
@@ -43,7 +43,7 @@ def gen_big5_table(codecs_name):
                 msg += f'　None'
 
             # 若低位元為 '7e' or 'fe', 則下一個肯定不存在 (ff, 7f), 原因為低位元只到 0x7E 以及 0xFE
-            if low_hex_str.lower() in ['7e', 'fe']:
+            if low_hex_str in ['7E', 'FE']:
                 msg += f'　Undefined'
         else:
             # 印出累積的資料行
@@ -55,7 +55,7 @@ def gen_big5_table(codecs_name):
             msg += f'{current_hex_head}　｜　'
 
             # 若低位元為 'a1', 則上一個肯定不存在 (a0), 原因為 0xA0 位於低位排除名單內
-            if low_hex_str.lower() == 'a1':
+            if low_hex_str == 'A1':
                 msg += f'　Undefined'
             char = get_decoded_char(codecs_name, hex_str)
             if char is not None:
@@ -68,10 +68,10 @@ def gen_big5_markdown_table(codecs_name):
     """
     依照編碼, 產出一張 Markdown 語法內碼Table
     :param codecs_name: Big5 類
-    :return: Print 出 Table
+    :return: Print 出 Markdown style table
     """
     # Print Header
-    print(f'{codecs_name}| +0| +1| +2| +3| +4| +5| +6| +7| +8| +9| +A| +B| +c| +D| +E| +F|')
+    print(f'{codecs_name}| +0| +1| +2| +3| +4| +5| +6| +7| +8| +9| +A| +B| +C| +D| +E| +F|')
     print(f'---------| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:| :-:|')
 
     current_hex_head = ''
@@ -88,7 +88,7 @@ def gen_big5_markdown_table(codecs_name):
                 msg += f'None|'
 
             # 若低位元為 '7e' or 'fe', 則下一個肯定不存在 (ff, 7f), 原因為低位元只到 0x7E 以及 0xFE
-            if low_hex_str.lower() in ['7e', 'fe']:
+            if low_hex_str in ['7E', 'FE']:
                 msg += f'Undefined|'
         else:
             # 印出累積的資料行
@@ -100,13 +100,14 @@ def gen_big5_markdown_table(codecs_name):
             msg += f'{current_hex_head}|'
 
             # 若低位元為 'a1', 則上一個肯定不存在 (a0), 原因為 0xA0 位於低位排除名單內
-            if low_hex_str.lower() == 'a1':
+            if low_hex_str == 'A1':
                 msg += f'Undefined|'
             char = get_decoded_char(codecs_name, hex_str)
             if char is not None:
                 msg += f'{char}|'
             else:
                 msg += f'None|'
+    print('Generate by gen_big5_codecs_table')
 
 
 def get_decoded_char(codecs_name, hex_str):
