@@ -62,6 +62,9 @@ def gen_big5_table(codecs_name):
                 msg += f'　{char}'
             else:
                 msg += f'　None'
+    # Print last row
+    if msg != '':
+        print(msg)
 
 
 def gen_big5_markdown_table(codecs_name):
@@ -107,6 +110,9 @@ def gen_big5_markdown_table(codecs_name):
                 msg += f'{char}|'
             else:
                 msg += f'None|'
+    # Print last row
+    if msg != '':
+        print(msg)
     print('Generate by gen_big5_codecs_table')
 
 
@@ -119,4 +125,4 @@ def get_decoded_char(codecs_name, hex_str):
 
 
 if __name__ == '__main__':
-    gen_big5_markdown_table('big5')
+    gen_big5_markdown_table('cp950')
