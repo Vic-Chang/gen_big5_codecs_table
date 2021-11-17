@@ -1,3 +1,6 @@
+import argparse
+
+
 def gen_big5_hex() -> tuple[hex, hex]:
     """
     產出 Big5 內碼 Table
@@ -125,4 +128,12 @@ def get_decoded_char(codecs_name, hex_str):
 
 
 if __name__ == '__main__':
-    gen_big5_markdown_table('cp950')
+    parser = argparse.ArgumentParser(description='Default codec is Big5, print text as Markdown style')
+    parser.add_argument('-c', '--codec', help='The codec you want to generate. ( big5, cp950, big5hkscs )')
+    parser.add_argument('-p', '--plain', help='Final result will print as plain text', action="store_true")
+    args = parser.parse_args()
+    codec = args.codec if args.codec is not None else 'big5'
+    if args.plain:
+        gen_big5_table(codec)
+    else:
+        gen_big5_markdown_table(codec)
