@@ -47,7 +47,7 @@ Pirnt `big5hkscs` internal table as plain text:
 
 `python main.py -c big5hkscs -p`
 
-## Result
+## Results
 
 Final result ( markdown style ) at my gists:
 
